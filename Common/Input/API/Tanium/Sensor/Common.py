@@ -35,9 +35,10 @@ def plug_in(sessionKey, projectType) :
                                 total=len(CSRJD['result_sets'][0]['rows']),
                                 desc='CALL_API : {}'.format(CSP))
             else :
-                DATA_list = enumerate(CSRJD['result_sets'][0]['rows'])
-                
-            for index, d in DATA_list :
+                #DATA_list = enumerate(CSRJD['result_sets'][0]['rows'])
+                DATA_list = CSRJD['result_sets'][0]['rows']
+
+            for d in DATA_list :
                 DL = []
                 for i in d['data'] :
                     DL.append(i)
