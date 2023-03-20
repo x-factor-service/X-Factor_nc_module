@@ -46,14 +46,18 @@ def plug_in(data, dataType):
 
 
             if not data['manufacturer'][c].startswith('[current') and not data['manufacturer'][c].startswith('TSE-Error') and not data['manufacturer'][c].startswith('Unknown') and not data['manufacturer'][c]== ' ' and not data['manufacturer'][c].startswith('[hash'):
-                MF = data['manufacturer'][c]
+                if data['manufacturer'][c] in ['HP', 'HPE']:
+                    MF = 'HPE'
+                else:
+                    MF = data['manufacturer'][c]
             else:
                 MF = 'unconfirmed'
 
-            #세션ip 전처리 추가 예정(server별 session상위5개)
 
 
-            if not data['session_ip'][c].startswith('{"[current') and "TSE-Error" not in data['session_ip'][c]  and not data['session_ip'][c].startswith('{"[Unknown') and not data['session_ip'][c] == ' ':
+
+            # 세션ip 전처리 추가 예정(server별 session상위5개 ) 새로운 Sensor로 수정한부분
+            if not data['session_ip'][c].startswith('{"[current') and "TSE-Error" not in data['session_ip'][c] and not data['session_ip'][c].startswith('{"[Unknown') and not data['session_ip'][c] == ' ':
                 if data['session_ip'][c].startswith('{"[no result'):
                     SIP = ['no results']
                 elif data['session_ip'][c][2] == '(':
@@ -70,36 +74,67 @@ def plug_in(data, dataType):
                     SIP.append(SIPL)
                 else:
                     SIP = data['session_ip'][c].split(',')
-                    #SIP = data['session_ip'][c].replace('{', '[').replace('}', ']')
-                    #SIP = eval(SIP)
+                    # SIP = data['session_ip'][c].replace('{', '[').replace('}', ']')
+                    # SIP = eval(SIP)
                     SIPL = []
-                    for a in range(len(SIP)) :
+                    for a in range(len(SIP)):
                         if pattern.findall(SIP[a]):
                             continue
                         elif '{' in SIP[a] or '}' in SIP[a]:
                             abc = SIP[a].replace('{', '').replace('}', '')
                             SIPL.append(abc)
                         else:
-                            #abc = SIP[a].split(' ')
-                            #SIPL.append(abc[1])
+                            # abc = SIP[a].split(' ')
+                            # SIPL.append(abc[1])
                             # print(SIP.split(','))
                             SIPL.append(SIP[a])
                     SIP = []
                     SIP.append(SIPL)
-                # else:
-                #     SIP = data['session_ip'][c].replace('{', '[').replace('}', ']')
-                #     SIP = eval(SIP)
-                #     SIPL = []
-                #     for a in range(len(SIP)) :
-                #         if not SIP[a].startswith('[hash') and not SIP[a].startswith('Warning') and "TSE-Error" not in SIP[a]:
-                #             abc = SIP[a].split(' ')
-                #             SIPL.append(abc[1])
-                #         else:
-                #             continue
-                #     SIP = []
-                #     SIP.append(SIPL)
             else:
                 SIP = ['unconfirmed']
+
+
+            #세션ip 전처리 추가 예정(server별 session상위5개 기존 새로운 SessipnIP수정부분 초기)
+            # if pattern.findall(data['session_ip'][c]):
+            #     SIP = 'NO'
+            # if 'current' not in data['session_ip'][c] and 'TSE-Error' not in data['session_ip'][c] and 'Unkown' not in data['session_ip'][c] and not data['session_ip'][c] == ' ':
+            #     if data['session_ip'][c].startswith('{"[no result'):
+            #         SIP = ['no results']
+            #     elif data['session_ip'][c][2] == '(':
+            #         SIP = data['session_ip'][c].replace('{', '[').replace('}', ']')
+            #         SIP = eval(SIP)
+            #         SIPL = []
+            #         for a in range(len(SIP)):
+            #             if not pattern.findall(SIP[a]):
+            #             # if not SIP[a].startswith('[hash') and not SIP[a].startswith('Warning'):
+            #                 if '(' in SIP[a]:
+            #                     b = eval(SIP[a])
+            #                     SIPL.append(b[1])
+            #                 else:
+            #                     abc = SIP[a].split(' ')
+            #                     SIPL.append(abc[1])
+            #             else:
+            #                 continue
+            #         SIP = []
+            #         SIP.append(SIPL)
+            #
+            #     else:
+            #         SIP = data['session_ip'][c].replace('{', '[').replace('}', ']')
+            #         SIP = eval(SIP)
+            #         SIPL = []
+            #         for a in range(len(SIP)) :
+            #             if '(' in SIP[a]:
+            #                 abc = SIP[a].replace('(', '').replace(')', '')
+            #                 SIPL.append(eval(abc)[1])
+            #             elif pattern.findall(SIP[a]):
+            #                 continue
+            #             else:
+            #                 abc = SIP[a].split(' ')
+            #                 SIPL.append(abc[1])
+            #         SIP = []
+            #         SIP.append(SIPL)
+            # else:
+            #     SIP = ['unconfirmed']
 
             if dataType == 'minutely_daily_asset':
                 CNM = data['computer_name'][c]
@@ -205,7 +240,9 @@ def plug_in(data, dataType):
                 else:
                     OP = 'unconfirmed'
                 if not data['operating_system'][c].startswith('[current') and not data['operating_system'][c].startswith('TSE-Error') and not data['operating_system'][c].startswith('Unknown') and not data['operating_system'][c].startswith('[hash'):
-                    OS = data['operating_system'][c]
+                    OS = re.sub(r'\(Core\)|\(Final\)', '', data['operating_system'][c])
+                    OS = re.sub(r'(\.\d+)*', '', OS).strip()
+                    #OS = data['operating_system'][c]
                 else:
                     OS = 'unconfirmed'
                 if not data['is_virtual'][c].startswith('[current') and not data['is_virtual'][c].startswith('TSE-Error') and not data['is_virtual'][c].startswith('Unknown') and not data['is_virtual'][c].startswith('[hash'):

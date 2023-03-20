@@ -29,9 +29,11 @@ def plug_in(data) :
             else :
                 ramUsage = 'unconfirmed'
 
-            if type(data.cup_consumption[c]) == float or type(data.cup_consumption[c]) == int :
+            if type(data.cup_consumption[c]) == float :
                 cpuUsage = round(data.cup_consumption[c],1)
-            elif type(data.cup_consumption[c]) == str  :
+            elif type(data.cup_consumption[c]) == int :
+                cpuUsage = data.cup_consumption[c]
+            elif type(data.cup_consumption[c]) == str :
                 cpuUsage = 'unconfirmed'
             else :
                 cpuUsage = 'unconfirmed'

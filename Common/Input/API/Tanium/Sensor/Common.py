@@ -38,7 +38,7 @@ def plug_in(sessionKey, projectType) :
                 #DATA_list = enumerate(CSRJD['result_sets'][0]['rows'])
                 DATA_list = CSRJD['result_sets'][0]['rows']
 
-            for d in DATA_list :
+            for d in DATA_list : #index 제거
                 DL = []
                 for i in d['data'] :
                     DL.append(i)

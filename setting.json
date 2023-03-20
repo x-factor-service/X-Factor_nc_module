@@ -76,7 +76,7 @@
           "USE" : "true",
           "TIME" : {
             "hour" : "00",
-            "minute" : "02"
+            "minute" : "03"
           }
         }
       },
@@ -125,7 +125,7 @@
       },
       "INPUT" : {
         "API" : {
-          "URL": "https://1.223.168.93:49105",
+          "URL": "https://192.168.5.100",
           "PATH": {
             "SesstionKey": "/api/v2/session/login",
             "Sensor": "/api/v2/result_data/saved_question/"
