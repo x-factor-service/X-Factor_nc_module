@@ -302,7 +302,10 @@ def plug_in(data, dataType):
 
                 if not data['tanium_client_subnet'][c].startswith('[current') and not data['tanium_client_subnet'][c].startswith(
                         'TSE-Error') and not data['tanium_client_subnet'][c].startswith('Unknown') and not data['tanium_client_subnet'][c].startswith('Can not determine') and not data['tanium_client_subnet'][c].startswith('[hash'):
-                    TCS = data['tanium_client_subnet'][c]
+                    if '0.0.0.0' in data['tanium_client_subnet'][c]:
+                        TCS = 'unconfirmed'
+                    else:
+                            TCS = data['tanium_client_subnet'][c]
                 else:
                     TCS = 'unconfirmed'
 
