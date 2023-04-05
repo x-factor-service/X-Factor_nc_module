@@ -156,7 +156,7 @@ if __name__ == "__main__":
     # # console_handler.setFormatter(formatter)
     
     logger = logging.getLogger()
-    logger.setLevel(logging.DEBUG)
+    logger.setLevel(logging.WARNING)
     logger.addHandler(date_handler())
     logger.info('Module Started')
     
