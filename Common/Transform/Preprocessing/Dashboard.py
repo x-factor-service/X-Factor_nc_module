@@ -304,8 +304,24 @@ def plug_in(data, dataType):
                         'TSE-Error') and not data['tanium_client_subnet'][c].startswith('Unknown') and not data['tanium_client_subnet'][c].startswith('Can not determine') and not data['tanium_client_subnet'][c].startswith('[hash'):
                     if '0.0.0.0' in data['tanium_client_subnet'][c]:
                         TCS = 'unconfirmed'
+                    elif data['tanium_client_subnet'][c] == '192.168.0.0/20' or data['tanium_client_subnet'][c] == '172.18.112.0/21':
+                        TCS = '게임서버팜'
+                    elif data['tanium_client_subnet'][c] == '172.20.0.0/21' or data['tanium_client_subnet'][c] == '172.20.160.0/21' or data['tanium_client_subnet'][c] == '172.20.0.0/22':
+                        TCS = '인프라서버팜'
+                    elif data['tanium_client_subnet'][c] == '172.20.92.0/22' or data['tanium_client_subnet'][c] == '172.20.96.0/22':
+                        TCS = '플랫폼서버팜'
+                    elif data['tanium_client_subnet'][c] == '172.20.80.0/21':
+                        TCS = '구 인터넷 개발망'
+                    elif data['tanium_client_subnet'][c] == '172.19.72.0/21' or data['tanium_client_subnet'][c] == '172.19.74.0/22':
+                        TCS = 'Qtest망'
+                    elif data['tanium_client_subnet'][c] == '211.189.164.0/24':
+                        TCS = 'DMZ망'
+                    elif data['tanium_client_subnet'][c] == '170.0.0.0/8':
+                        TCS = '10LanPC망'
+                    elif data['tanium_client_subnet'][c] == '172.19.64.0/22' or data['tanium_client_subnet'][c] == '172.19.64.0/21':
+                        TCS = 'Sandbox망'
                     else:
-                            TCS = data['tanium_client_subnet'][c]
+                        TCS = '기타'
                 else:
                     TCS = 'unconfirmed'
 
