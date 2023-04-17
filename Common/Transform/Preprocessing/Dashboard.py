@@ -304,7 +304,7 @@ def plug_in(data, dataType):
                         'TSE-Error') and not data['tanium_client_subnet'][c].startswith('Unknown') and not data['tanium_client_subnet'][c].startswith('Can not determine') and not data['tanium_client_subnet'][c].startswith('[hash'):
                     if '0.0.0.0' in data['tanium_client_subnet'][c]:
                         TCS = 'unconfirmed'
-                    elif data['tanium_client_subnet'][c] == '192.168.0.0/20' or data['tanium_client_subnet'][c] == '172.18.112.0/21':
+                    elif data['tanium_client_subnet'][c] == '172.18.0.0/21' or data['tanium_client_subnet'][c] == '172.18.112.0/21':
                         TCS = '게임서버팜'
                     elif data['tanium_client_subnet'][c] == '172.20.0.0/21' or data['tanium_client_subnet'][c] == '172.20.160.0/21' or data['tanium_client_subnet'][c] == '172.20.0.0/22':
                         TCS = '인프라서버팜'

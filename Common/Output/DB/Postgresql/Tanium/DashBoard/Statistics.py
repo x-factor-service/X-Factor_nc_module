@@ -4,19 +4,21 @@ import json
 import logging
 from tqdm import tqdm
 
+with open("setting.json", encoding="UTF-8") as f:
+    SETTING = json.loads(f.read())
+DBHOST = SETTING['CORE']['Tanium']['OUTPUT']['DB']['PS']['HOST']
+DBPORT = SETTING['CORE']['Tanium']['OUTPUT']['DB']['PS']['PORT']
+DBNM = SETTING['CORE']['Tanium']['OUTPUT']['DB']['PS']['NAME']
+DBUNM = SETTING['CORE']['Tanium']['OUTPUT']['DB']['PS']['USER']
+DBPWD = SETTING['CORE']['Tanium']['OUTPUT']['DB']['PS']['PWD']
+MST = SETTING['CORE']['Tanium']['OUTPUT']['DB']['PS']['TNM']['MS']
+DST = SETTING['CORE']['Tanium']['OUTPUT']['DB']['PS']['TNM']['DS']
+PROGRESS = SETTING['PROJECT']['PROGRESSBAR'].lower()
+
+
 def plug_in(data, cycle):
     logger = logging.getLogger(__name__)
     try:
-        with open("setting.json", encoding="UTF-8") as f:
-            SETTING = json.loads(f.read())
-        DBHOST = SETTING['CORE']['Tanium']['OUTPUT']['DB']['PS']['HOST']
-        DBPORT = SETTING['CORE']['Tanium']['OUTPUT']['DB']['PS']['PORT']
-        DBNM = SETTING['CORE']['Tanium']['OUTPUT']['DB']['PS']['NAME']
-        DBUNM = SETTING['CORE']['Tanium']['OUTPUT']['DB']['PS']['USER']
-        DBPWD = SETTING['CORE']['Tanium']['OUTPUT']['DB']['PS']['PWD']
-        MST = SETTING['CORE']['Tanium']['OUTPUT']['DB']['PS']['TNM']['MS']
-        DST = SETTING['CORE']['Tanium']['OUTPUT']['DB']['PS']['TNM']['DS']
-        PROGRESS = SETTING['PROJECT']['PROGRESSBAR'].lower()
         if cycle == 'minutely':
             TNM = MST
             insertDate = datetime.today().strftime("%Y-%m-%d %H:%M:%S")
@@ -71,4 +73,47 @@ def plug_in(data, cycle):
         logger.info('Statistics Table INSERT connection - ' + cycle + '성공')
     except ConnectionError as e:
         logger.warning('Statistics Table INSERT connection 실패')
+        logger.warning('Error : ' + str(e))
+
+#---------------------statistics 일주일마다 자동삭제----------------------
+def delete(cycle):
+    logger = logging.getLogger(__name__)
+    try:
+        current_date = datetime.now()
+        one_week_ago = current_date - timedelta(weeks=1)
+        deleteDate = one_week_ago.strftime('%Y-%m-%d')
+
+        insertConn = psycopg2.connect(
+            'host={0} port={1} dbname={2} user={3} password={4}'.format(DBHOST, DBPORT, DBNM, DBUNM, DBPWD))
+        insertCur = insertConn.cursor()
+
+        if cycle == 'minutely_delete':
+            IQ = """
+                DELETE FROM minutely_statistics 
+                WHERE
+                    classification ='session_ip'
+                    or 
+                    classification = 'running_service'
+                    or
+                    classification = 'installed_applications'
+                    AND statistics_collection_date <= '""" + deleteDate + """'
+                """
+
+        elif cycle == 'daily_delete':
+            IQ = """
+                DELETE FROM daily_statistics 
+                WHERE
+                    classification ='session_ip'
+                    or 
+                    classification = 'running_service'
+                    or
+                    classification = 'installed_applications'
+                    AND statistics_collection_date <= '""" + deleteDate + """'
+                """
+        insertCur.execute(IQ)
+        insertConn.commit()
+        insertConn.close()
+        logger.info('Statistics Table DELETE connection - ' + cycle + '성공')
+    except ConnectionError as e:
+        logger.warning('Statistics Table DELETE connection 실패')
         logger.warning('Error : ' + str(e))
