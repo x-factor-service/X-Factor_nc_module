@@ -26,7 +26,7 @@ def plug_in(data, inputPlugin) :
             'open_share_details_type', 'open_share_details_permissions', 'primary_owner_name', 'uptime',
             'usb_write_protected', 'user_accounts', 'ad_query_last_logged_in_user_date',
             'ad_query_last_logged_in_user_name', 'ad_query_last_logged_in_user_time',
-            'tanium_client_subnet','manufacturer', 'sessionIp', 'nvidiaSmi', 'online'
+            'tanium_client_subnet','manufacturer', 'sessionIp', 'nvidiaSmi', 'online', 'iscsi_name', 'iscsi_drive_letter', 'iscsi_size', 'iscsi_free_space'
         ]
         if PROGRESS == 'true' :
             DATA_list = tqdm(enumerate(data),
@@ -148,6 +148,24 @@ def plug_in(data, inputPlugin) :
                     nvidiaSmi.append(NS['text'])
                 OL = d[57][0]['text']
 
+                IN = []
+                for IND in d[58]:
+                    IN.append(IND['text'])
+                    # print(IN)
+
+                IDL = []
+                for IDLD in d[59]:
+                    IDL.append(IDLD['text'])
+                    #print(IDL)
+
+                IS = []
+                for ISD in d[60]:
+                    IS.append(ISD['text'])
+                IFS = []
+                for IFSD in d[61]:
+                    IFS.append(IFSD['text'])
+
+
 
             if inputPlugin == 'DB':
                 CI = d[0]
@@ -208,12 +226,15 @@ def plug_in(data, inputPlugin) :
                 SI = d[55]
                 nvidiaSmi = d[56]
                 OL = d[57]
-
+                IN = d[58]
+                IDL = d[59]
+                IS = d[60]
+                IFS = d[61]
             DFL.append(
                 [CI, CN, LR, DTS, DUS, OP, OS, IV, CT, IP, LPC, EPC, RUS, RTS, IA, IAV, IASUS, IAU, RP, RS, CPUC,
                     CPUDST, CPUDCPU, CPUDCPUS, CPUDTPP, CPUDTC, CPUDTLP, DFS, HCPUP, HMP, HU, IPA, TCNATIPA, LLIU,
                     LPP, LPN, LPLP, LSC, MACA, MC, openPort, OSDN, OSDPath, OSDS, OSDT, OSDP, PON, Uptime, USBWP,
-                    UA, ADQLLIUD, ADQLLIUN, ADQLLIUT, TCS, manufacturer, SI, nvidiaSmi, OL])
+                    UA, ADQLLIUD, ADQLLIUN, ADQLLIUT, TCS, manufacturer, SI, nvidiaSmi, OL, IN, IDL, IS, IFS])
         
         DF = pd.DataFrame(DFL, columns=DFC)
         logger.info('Asset/All.py -  ' + inputPlugin + ' 성공')

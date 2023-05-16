@@ -15,7 +15,7 @@ def plug_in(data, inputPlugin, dataType) :
                 DFC = ['computer_id', 'computer_name', 'ipv_address', 'chassis_type', 'os_platform', 'operating_system', 'is_virtual',
                        'last_reboot', 'driveUsage', 'ramUsage', 'cpuUsage', 'listenPortCountChange',
                        'establishedPortCountChange', 'running_service_count', 'online', 'tanium_client_subnet', 'manufacturer', 'session_ip_count', 'nvidia_smi',
-                       'ram_use_size', 'ram_total_size', 'cup_details_cup_speed', 'disk_used_space', 'disk_total_space']
+                       'ram_use_size', 'ram_total_size', 'cup_details_cup_speed', 'disk_used_space', 'disk_total_space', 'iscsi_name', 'iscsi_drive_letter', 'iscsi_size', 'iscsi_free_space', 'iscsi_used_space', 'iscsiusage']
             elif dataType == 'minutely_statistics' :
                 DFC = ['minutely_statistics_unique', 'classification', 'item', 'item_count']
             DFL = []
@@ -53,7 +53,13 @@ def plug_in(data, inputPlugin, dataType) :
                     CDS = d[21]
                     DSZ = d[22]
                     DTS = d[23]
-                    DFL.append([CID, CNM, IP, CT, OSP, OP, IV, LR, DUS, RUS, CPUUS, LPC, EPC, RSC, OL, TCS, MF, SIP, NS, RSZ, RTZ, CDS, DSZ, DTS])
+                    IN = d[24]
+                    IDL = d[25]
+                    IS = d[26]
+                    IFS = d[27]
+                    IUS = d[28]
+                    IU = d[29]
+                    DFL.append([CID, CNM, IP, CT, OSP, OP, IV, LR, DUS, RUS, CPUUS, LPC, EPC, RSC, OL, TCS, MF, SIP, NS, RSZ, RTZ, CDS, DSZ, DTS, IN, IDL, IS, IFS, IUS, IU])
                 elif dataType == 'minutely_statistics':
                     MSU = d[0]
                     classification = d[1]

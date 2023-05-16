@@ -38,7 +38,153 @@ def plug_in(data) :
             else :
                 cpuUsage = 'unconfirmed'
 
-            DL.append([data.computer_id[c], str(driveUsage), str(ramUsage), str(cpuUsage)])
+
+            # 사용량
+            iscsi_used_space = []
+            iscsiusage = []
+            if data.iscsi_size[c][0].isdigit() and data.iscsi_free_space[c][0].isdigit():
+                for i in range(len(data.iscsi_size[c])):
+                    iscsi_size = int(data.iscsi_size[c][i])
+                    iscsi_free_space = int(data.iscsi_free_space[c][i])
+                    used_space_percentage = round((iscsi_size - iscsi_free_space), 1)
+                    iscsi_used_space.append(used_space_percentage)
+
+                    used_percentage = round((used_space_percentage / iscsi_size) * 100, 1)
+                    iscsiusage.append(used_percentage)
+            else:
+                iscsiusage = 'unconfirmed'
+                iscsi_used_space = 'unconfirmed'
+
+            # iscsi_used_space = []
+            # iscsiusage = []
+            # def calculate_usage(iscsi_size, iscsi_free_space):
+            #     used_space_percentage = round((iscsi_size - iscsi_free_space), 1)
+            #     iscsi_used_space.append(used_space_percentage)
+            #
+            #     used_percentage = round((used_space_percentage / iscsi_size) * 100, 1)
+            #     iscsiusage.append(used_percentage)
+            #
+            # if data.iscsi_size[c][0].isdigit() and data.iscsi_free_space[c][0].isdigit():
+            #     for i in range(len(data.iscsi_size[c])):
+            #         if len(data.iscsi_size[c]) > i and len(data.iscsi_free_space[c]) > i:
+            #             iscsi_size = int(data.iscsi_size[c][i])
+            #             iscsi_free_space = int(data.iscsi_free_space[c][i])
+            #             calculate_usage(iscsi_size, iscsi_free_space)
+            #         else:
+            #             break
+            # else:
+            #     iscsi_used_space = 'unconfirmed'
+            #     iscsiusage = 'unconfirmed'
+            # iscsi_used_space = []
+            # iscsiusage = []
+            # if data.iscsi_size[c][0].isdigit() and data.iscsi_free_space[c][0].isdigit():
+            #     iscsi_size = int(data.iscsi_size[c][0])
+            #     iscsi_free_space = int(data.iscsi_free_space[c][0])
+            #     used_space_percentage = round((iscsi_size - iscsi_free_space), 1)
+            #     iscsi_used_space.append(used_space_percentage)
+            #
+            #     used_percentage = round((used_space_percentage / iscsi_size) * 100, 1)
+            #     iscsiusage.append(used_percentage)
+            #
+            #     if len(data.iscsi_size[c]) > 1 and len(data.iscsi_free_space[c]) > 1:
+            #         iscsi_size = int(data.iscsi_size[c][1])
+            #         iscsi_free_space = int(data.iscsi_free_space[c][1])
+            #         used_space_percentage = round((iscsi_size - iscsi_free_space), 1)
+            #         iscsi_used_space.append(used_space_percentage)
+            #
+            #         used_percentage = round((used_space_percentage / iscsi_size) * 100, 1)
+            #         iscsiusage.append(used_percentage)
+            # else:
+            #     iscsi_used_space.append('unconfirmed')
+            #     iscsiusage.append('unconfirmed')
+            # print(iscsi_used_space)
+
+
+
+
+            # 리스트 형태 아닌것
+            # if data.iscsi_size[c][0].isdigit() and data.iscsi_free_space[c][0].isdigit():
+            #     iscsi_size = int(data.iscsi_size[c][0])
+            #     iscsi_free_space = int(data.iscsi_free_space[c][0])
+            #     used_space_percentage = round((iscsi_size - iscsi_free_space) , 1)
+            #     iscsi_used_space = used_space_percentage
+            #
+            #     if len(data.iscsi_size[c]) > 1 and len(data.iscsi_free_space[c]) > 1:
+            #         iscsi_size = int(data.iscsi_size[c][1])
+            #         iscsi_free_space = int(data.iscsi_free_space[c][1])
+            #         used_space_percentage = round((iscsi_size - iscsi_free_space), 1)
+            #         iscsi_used_space = f"{iscsi_used_space}, {used_space_percentage}"
+            # else:
+            #     iscsi_used_space = 'unconfirmed'
+
+
+            #원본
+            # if data.iscsi_size[c][0].isdigit() and data.iscsi_free_space[c][0].isdigit() :
+            #     iscsi_used_space = round(int(data.iscsi_size[c][0]) / int(data.iscsi_free_space[c][0]) * 100, 1)
+            #     print(iscsi_used_space)
+            # else :
+            #     iscsi_used_space = 'unconfirmed'
+
+            #사용률
+            # iscsiusage = []
+            # if data.iscsi_used_space[c][0].isdigit() and data.iscsi_size[c][0].isdigit():
+            #     iscsi_used_space = int(data.iscsi_used_space[c][0])
+            #     print(iscsi_used_space)
+            #     iscsi_size = int(data.iscsi_size[c][0])
+            #     used_percentage = round((iscsi_used_space / iscsi_size) * 100, 1)
+            #     iscsiusage.append(used_percentage)
+            #
+            #     if len(data.iscsi_used_space[c]) > 1 and len(data.iscsi_size[c]) > 1:
+            #         iscsi_used_space = int(data.iscsi_size[c][1])
+            #         iscsi_size = int(data.iscsi_free_space[c][1])
+            #         used_percentage = round((iscsi_used_space / iscsi_size) * 100, 1)
+            #         iscsiusage.append(used_percentage)
+            #         #print(iscsiusage)
+            # else:
+            #     iscsiusage='unconfirmed'
+            #
+            # print("-------------------------")
+            # iscsiusage = []
+            # if data.iscsi_size[c][0].isdigit() and data.iscsi_free_space[c][0].isdigit():
+            #     iscsi_size = int(data.iscsi_size[c][0])
+            #     iscsi_free_space = int(data.iscsi_free_space[c][0])
+            #     used_percentage = round((iscsi_size / iscsi_free_space) * 100 , 1)
+            #     iscsiusage.append(used_percentage)
+            #
+            #     if len(data.iscsi_size[c]) > 1 and len(data.iscsi_free_space[c]) > 1:
+            #         iscsi_size = int(data.iscsi_size[c][1])
+            #         iscsi_free_space = int(data.iscsi_free_space[c][1])
+            #         used_percentage = round((iscsi_size / iscsi_free_space) * 100, 1)
+            #         iscsiusage.append(used_percentage)
+            # else:
+            #     iscsiusage.append('unconfirmed')
+                #iscsiusage = 'unconfirmed' 언컴펌드 리스트삭제
+
+
+            #원본
+            # if data.iscsi_size[c][0].isdigit() and data.iscsi_free_space[c][0].isdigit() :
+            #     iscsiusage = round(int(data.iscsi_size[c][0]) / int(data.iscsi_free_space[c][0]) * 100, 1)
+            # else :
+            #     iscsiusage = 'unconfirmed'
+            # print(iscsiusage)
+
+            # iscsiusage = []
+            # if data.iscsi_used_space[c][0].isdigit() and data.iscsi_size[c][0].isdigit():
+            #     iscsi_used_space = int(data.iscsi_used_space[c][0])
+            #     iscsi_size = int(data.iscsi_size[c][0])
+            #     iscsiusage_percentage = round((iscsi_used_space / iscsi_size) * 100, 1)
+            #     iscsiusage.append(iscsiusage_percentage)
+            #
+            #     if len(data.iscsi_used_space[c]) > 1 and len(data.iscsi_size[c]) > 1:
+            #         iscsi_used_space = int(data.iscsi_used_space[c][1])
+            #         iscsi_size = int(data.iscsi_size[c][1])
+            #         iscsiusage_percentage = round((iscsi_used_space / iscsi_size) * 100, 1)
+            #         iscsiusage.append(iscsiusage_percentage)
+            #     else:
+            #         iscsiusage.append('unconfirmed')
+            # print(iscsiusage)
+
+            DL.append([data.computer_id[c], str(driveUsage), str(ramUsage), str(cpuUsage),str(iscsi_used_space), str(iscsiusage)])
         logger.info('Usage.py - 성공')
         return DL
     except Exception as e:

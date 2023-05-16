@@ -101,6 +101,12 @@ def plug_in(data, classification, itemType) :
             elif classification == 'online_asset' :
                 DL.append(len(data.computer_id))
 
+            elif classification == 'iscsi_name':
+                if data.iscsi_name[c] =='no results' or data.iscsi_name[c] == 'unconfirmed':
+                    DL.append('NO')
+                else :
+                    DL.append('YES')
+
 
 
         DF = pd.DataFrame(DL, columns=[CNM])
@@ -168,6 +174,11 @@ def plug_in(data, classification, itemType) :
         elif classification == 'online_asset':
             statistics_unique = ['online_asset']
             item = ['online_asset']
+
+
+        elif classification == 'iscsi_name':
+            statistics_unique = classification + '_' + DFGS.IS
+            item = DFGS.IS
 
         item_count = DFG.counts
 

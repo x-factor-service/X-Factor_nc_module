@@ -107,8 +107,9 @@ def main():
             
             for i in reversed(range(3)) :
                 print("...........{}".format(i + 1), end="\r")
-                time.sleep(1) 
-                
+                time.sleep(1)
+            CDTH = "00"
+            CDTM = "03"
             thread.start()
             sched = BlockingScheduler(timezone='Asia/Seoul')
             #sched.add_job(minutely, 'interval', seconds=CMT)

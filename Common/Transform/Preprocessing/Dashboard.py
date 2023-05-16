@@ -190,7 +190,6 @@ def plug_in(data, dataType):
                     DTS.append(str(items))
                 else:
                     DTS.append('unconfirmed')
-
                 DUS = []
                 DUS_item = []
                 DUS_sum = 0
@@ -342,8 +341,44 @@ def plug_in(data, dataType):
 
                     NS = [NS_count, str(NS_item)]
 
+                if not data['iscsi_name'][c].startswith('{"[current') and not data['iscsi_name'][c].startswith(
+                        '"TSE-Error') and not data['iscsi_name'][c].startswith(
+                    '"Unknown') and not data['iscsi_name'][c].startswith('"[hash') and not data['iscsi_name'][c].startswith('{"[no results') and not data['iscsi_name'][c].startswith('{"N/A'):
+                    IN=data['iscsi_name'][c].replace('{','').replace('}','').replace('"','').split(',')
+                    # IN='ok'
+                else:
+                    IN = 'unconfirmed'
 
-                DL.append([CID, CNM, LR, DTS, DUS, OP, OS, IV, CT, IPV, LPC, YLPC, EPC, YEPC, RUS, RTS, IANM, RS, CPUC, OL, TCS, MF, SIP, NS, CDS])
+
+                if not data['iscsi_drive_letter'][c].startswith('{"[current') and not data['iscsi_drive_letter'][c].startswith(
+                        '"TSE-Error') and not data['iscsi_drive_letter'][c].startswith(
+                    '"Unknown') and not data['iscsi_drive_letter'][c].startswith('[hash') and not data['iscsi_drive_letter'][c].startswith('{"[no results') and not data['iscsi_drive_letter'][c] == '{""}':
+                    IDL = data['iscsi_drive_letter'][c].strip('{"}').split('","')
+                    # IDL='ok'
+                else:
+                    IDL = 'unconfirmed'
+
+
+                if not data['iscsi_size'][c].startswith('{"[current') and not data['iscsi_size'][c].startswith('"TSE-Error') and not data['iscsi_size'][c].startswith(
+                    '"Unknown') and not data['iscsi_size'][c].startswith('"[hash') and not data['iscsi_size'][c].startswith('{"[no results') and not data['iscsi_size'][c] == '{""}':
+                    # IS = data['iscsi_size'][c].replace('{', '').replace('}', '').replace('"', '').replace('GB','').split('","')
+                    IS = data['iscsi_size'][c].strip('{"}').split('","')
+                    IS = [re.findall(r'\d+', size)[0] for size in IS]
+                    # IS= 'ok'
+                else:
+                    IS = 'unconfirmed'
+
+                if not data['iscsi_free_space'][c].startswith('{"[current') and not data['iscsi_free_space'][c].startswith(
+                        '"TSE-Error') and not data['iscsi_free_space'][c].startswith(
+                    '"Unknown') and not data['iscsi_free_space'][c].startswith('"[hash') and not data['iscsi_free_space'][c].startswith('{"[no results') and not data['iscsi_free_space'][c] == '{""}':
+                    # IFS = data['iscsi_free_space'][c].replace('{', '').replace('}', '').replace('"', '').replace('GB','').split('","')
+                    IFS = data['iscsi_free_space'][c].strip('{"}').split('","')
+                    IFS = [re.findall(r'\d+', size)[0] for size in IFS]
+                    # IFS='ok'
+                else:
+                    IFS = 'unconfirmed'
+
+                DL.append([CID, CNM, LR, DTS, DUS, OP, OS, IV, CT, IPV, LPC, YLPC, EPC, YEPC, RUS, RTS, IANM, RS, CPUC, OL, TCS, MF, SIP, NS, CDS, IN, IDL, IS ,IFS])
             elif dataType == 'minutely_asset':
                 DL.append([CID, IANM, MF, RS, SIP])
         logger.info('Preprocessing.py - ' + dataType + ' 성공')

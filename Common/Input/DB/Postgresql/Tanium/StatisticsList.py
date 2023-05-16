@@ -16,11 +16,12 @@ def plug_in(dataType) :
         MSLT = SETTING['CORE']['Tanium']['INPUT']['DB']['PS']['TNM']['MSL']
         CMT = SETTING['CORE']['Tanium']['CYCLE']['MINUTELY']['TIME']
         PROGRESS = SETTING['PROJECT']['PROGRESSBAR'].lower()
-        
+
         minutes_ago = (datetime.today() - timedelta(minutes=CMT/60)).strftime("%Y-%m-%d %H:%M:%S")
         ten_minutes = (datetime.today() - timedelta(minutes=CMT / 30)).strftime("%Y-%m-%d %H:%M:%S")
         DL = []
-        selectConn = psycopg2.connect('host={0} port={1} dbname={2} user={3} password={4}'.format(DBHOST, DBPORT, DBNM, DBUNM, DBPWD))
+        selectConn = psycopg2.connect(
+            'host={0} port={1} dbname={2} user={3} password={4}'.format(DBHOST, DBPORT, DBNM, DBUNM, DBPWD))
         selectCur = selectConn.cursor()
         if dataType == 'minutely':
             SQ = """
@@ -49,10 +50,16 @@ def plug_in(dataType) :
                     cup_details_cup_speed,
                     disk_used_space,
                     disk_total_space,
+                    iscsi_name,
+                    iscsi_drive_letter,
+                    iscsi_size,
+                    iscsi_free_space,
+                    iscsi_used_space,
+                    iscsiusage,
                     asset_list_statistics_collection_date
                 from  
                     """ + MSLT + """
-                where to_char(asset_list_statistics_collection_date , 'YYYY-MM-DD HH24:MI:SS') >= '"""+ten_minutes+"""'"""
+                where to_char(asset_list_statistics_collection_date , 'YYYY-MM-DD HH24:MI:SS') >= '""" + ten_minutes + """'"""
         elif dataType == 'minutely_statistics_list_online':
             SQ = """
                 select
@@ -65,14 +72,14 @@ def plug_in(dataType) :
                     """ + MSLT
         selectCur.execute(SQ)
         selectRS = selectCur.fetchall()
-        
+
         if PROGRESS == 'true' :
-            DATA_list = tqdm(enumerate(selectRS), 
+            DATA_list = tqdm(enumerate(selectRS),
                             total=len(selectRS),
                             desc='IP_DB_STL_{}'.format(dataType))
         else :
             DATA_list = enumerate(selectRS)
-            
+
         for index, RS in DATA_list:
         # for RS in selectRS:
             DL.append(RS)

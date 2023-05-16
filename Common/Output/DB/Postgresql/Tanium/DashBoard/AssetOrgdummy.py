@@ -220,13 +220,17 @@ def plug_in(data, cycle) :
             SI = data.sessionIp[i]
             NS = data.nvidiaSmi[i]
             OL = data.online[i]
+            IN = data.iscsi_name[i]
+            IDL = data.iscsi_drive_letter[i]
+            IS = data.iscsi_size[i]
+            IFS = data.iscsi_free_space[i]
 
             if cycle == 'daily':
                 CI = data.computer_id[i]
                 dataList = CI, CN, LR, DTS, DUS, OP, OS, IV, CT, IP, LPC, EPC, RUS, RTS, IA, IAV, IASUS, IAU, RP, RS, CPUC, \
                            CPUDST, CPUDCPU, CPUDCPUS, CPUDTPP, CPUDTC, CPUDTLP, DFS, HCPUP, HMP, HU, IPA, TCNATIPA, LLIU, \
                            LPP, LPN, LPLP, LSC, MACA, MC, openPort, OSDN, OSDPath, OSDS, OSDT, OSDP, PON, Uptime, USBWP, \
-                           UA, ADQLLIUD, ADQLLIUN, ADQLLIUT, TCS, manufacturer, SI, NS, OL
+                           UA, ADQLLIUD, ADQLLIUN, ADQLLIUT, TCS, manufacturer, SI, NS, OL, IN, IDL, IS, IFS
                 insertCur.execute(IQ, (dataList))
             elif cycle == 'minutely':
                 for a in range(1, 2):
@@ -234,7 +238,7 @@ def plug_in(data, cycle) :
                     dataList = CI, CN, LR, DTS, DUS, OP, OS, IV, CT, IP, LPC, EPC, RUS, RTS, IA, IAV, IASUS, IAU, RP, RS, CPUC, \
                                CPUDST, CPUDCPU, CPUDCPUS, CPUDTPP, CPUDTC, CPUDTLP, DFS, HCPUP, HMP, HU, IPA, TCNATIPA, LLIU, \
                                LPP, LPN, LPLP, LSC, MACA, MC, openPort, OSDN, OSDPath, OSDS, OSDT, OSDP, PON, Uptime, USBWP, \
-                               UA, ADQLLIUD, ADQLLIUN, ADQLLIUT, TCS, manufacturer, SI, NS, OL
+                               UA, ADQLLIUD, ADQLLIUN, ADQLLIUT, TCS, manufacturer, SI, NS, OL, IN, IDL, IS, IFS
                     insertCur.execute(IQ, (dataList))
 
         insertConn.commit()

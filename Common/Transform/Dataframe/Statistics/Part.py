@@ -14,12 +14,12 @@ def plug_in(data, inputPlugin, dataType, columnsType) :
         if inputPlugin == 'DB':
             if dataType == 'minutely_statistics_list' :
                 if columnsType == 'usage':
-                    DFC = ['computer_id',  'driveUsage', 'ramUsage', 'cpuUsage']
+                    DFC = ['computer_id',  'driveUsage', 'ramUsage', 'cpuUsage', 'iscsi_used_space', 'iscsiusage']
                 elif columnsType == 'compare' :
                     DFC = ['computer_id', 'listenPortCountChange','establishedPortCountChange', 'online']
                 elif columnsType == 'normal':
                     DFC = ['computer_id', 'computer_name', 'ipv_address', 'chassis_type', 'os_platform', 'operating_system', 'is_virtual', 'last_reboot', 'tanium_client_subnet', 'manufacturer',
-                            'nvidia_smi', 'ram_use_size', 'ram_total_size', 'cup_details_cup_speed', 'disk_used_space', 'disk_total_space']
+                            'nvidia_smi', 'ram_use_size', 'ram_total_size', 'cup_details_cup_speed', 'disk_used_space', 'disk_total_space', 'iscsi_name', 'iscsi_drive_letter', 'iscsi_size', 'iscsi_free_space']
                 elif columnsType == 'count':
                     DFC = ['computer_id', 'running_service_count', 'session_ip_count']
 
@@ -49,7 +49,9 @@ def plug_in(data, inputPlugin, dataType, columnsType) :
                         DUS = d[1]
                         RUS = d[2]
                         CPUUS = d[3]
-                        DFL.append([CID, DUS, RUS, CPUUS])
+                        IUS = d[4]
+                        IU = d[5]
+                        DFL.append([CID, DUS, RUS, CPUUS, IUS, IU])
                     elif columnsType == 'compare' :
                         LPC = d[1]
                         EPC = d[2]
@@ -72,7 +74,11 @@ def plug_in(data, inputPlugin, dataType, columnsType) :
                         CDS = d[13]
                         DSZ = d[14][0]
                         DTS = d[15][0]
-                        DFL.append([CID, CNM, IP, CT, OSP, OS, IV, LR, TCS, MF, NS, RSZ, RTZ, CDS, DSZ, DTS])
+                        IN = d[16]
+                        IDL = d[17]
+                        IS = d[18]
+                        IFS = d[19]
+                        DFL.append([CID, CNM, IP, CT, OSP, OS, IV, LR, TCS, MF, NS, RSZ, RTZ, CDS, DSZ, DTS, IN, IDL, IS, IFS])
 
                     elif columnsType == 'count':
                         RSC = d[1]

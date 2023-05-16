@@ -32,11 +32,14 @@ def plug_in(data, cycle) :
                 INSERT INTO """ + TNM + """ (
                     computer_id, computer_name, ipv_address, chassis_type, os_platform, operating_system, is_virtual, last_reboot,
                     driveUsage, ramUsage, cpuUsage, listenPortCountChange, establishedPortCountChange,
-                    running_service_count, online, tanium_client_subnet, manufacturer, session_ip_count, nvidia_smi, ram_use_size, ram_total_size, cup_details_cup_speed,
-                    disk_used_space, disk_total_space, asset_list_statistics_collection_date
+                    running_service_count, online, tanium_client_subnet, manufacturer, session_ip_count, nvidia_smi, 
+                    ram_use_size, ram_total_size, cup_details_cup_speed,
+                    disk_used_space, disk_total_space, iscsi_name, iscsi_drive_letter, 
+                    iscsi_size, iscsi_free_space, iscsi_used_space, iscsiusage, 
+                    asset_list_statistics_collection_date
                 ) VALUES (
-                    %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, 
-                    %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, '""" + insertDate + """'
+                     %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, 
+                     %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, '""" + insertDate + """'
                 )
                 ON CONFLICT (computer_id)
                 DO UPDATE SET
@@ -63,6 +66,12 @@ def plug_in(data, cycle) :
                     cup_details_cup_speed = excluded.cup_details_cup_speed,
                     disk_used_space = excluded.disk_used_space,
                     disk_total_space = excluded.disk_total_space,
+                    iscsi_name = excluded.iscsi_name,
+                    iscsi_drive_letter = excluded.iscsi_drive_letter, 
+                    iscsi_size = excluded.iscsi_size, 
+                    iscsi_free_space = excluded.iscsi_free_space,
+                    iscsi_used_space = excluded.iscsi_used_space,
+                    iscsiusage = excluded.iscsiusage,
                     asset_list_statistics_collection_date = '""" + insertDate + """'                                                                
             """
         elif cycle == 'daily':
@@ -70,20 +79,23 @@ def plug_in(data, cycle) :
                 INSERT INTO """ + TNM + """ (
                     computer_id, computer_name, ipv_address, chassis_type, os_platform, operating_system, is_virtual, last_reboot,
                     driveUsage, ramUsage, cpuUsage, listenPortCountChange, establishedPortCountChange,
-                    running_service_count, online, tanium_client_subnet, manufacturer, session_ip_count, nvidia_smi, ram_use_size, ram_total_size, cup_details_cup_speed,
-                    disk_used_space, disk_total_space, asset_list_statistics_collection_date
+                    running_service_count, online, tanium_client_subnet, manufacturer, session_ip_count, nvidia_smi, 
+                    ram_use_size, ram_total_size, cup_details_cup_speed,
+                    disk_used_space, disk_total_space, iscsi_name, iscsi_drive_letter, 
+                    iscsi_size, iscsi_free_space, iscsi_used_space, iscsiusage, 
+                    asset_list_statistics_collection_date
                 ) VALUES (
                     %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, 
-                    %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, '""" + insertDate + """'
+                    %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, '""" + insertDate + """'
                 )
             """
         datalen = len(data.computer_id)
-        
-        if PROGRESS == 'true' :
+
+        if PROGRESS == 'true':
             DATA_list = tqdm(range(datalen),
-                            total=datalen,
-                            desc='CM_OP_DB_STL_{}'.format(cycle))
-        else :
+                             total=datalen,
+                             desc='CM_OP_DB_STL_{}'.format(cycle))
+        else:
             DATA_list = range(datalen)
 
         for i in DATA_list:
@@ -111,7 +123,13 @@ def plug_in(data, cycle) :
             CDS = data.cup_details_cup_speed[i]
             DSZ = data.disk_used_space[i]
             DTS = data.disk_total_space[i]
-            dataList = CI, CN, IP, CT, OP, OS, IV, LR, DUS, RUS, CPUUS, LPC, EPC, RSC, OL, TCS, MF, SIC, NS, RSZ, RTS, CDS, DSZ, DTS
+            IN = data.iscsi_name[i]
+            IDL = data.iscsi_drive_letter[i]
+            IS = data.iscsi_size[i]
+            IFS = data.iscsi_free_space[i]
+            IUS = data.iscsi_used_space[i]
+            IU = data.iscsiusage[i]
+            dataList = CI, CN, IP, CT, OP, OS, IV, LR, DUS, RUS, CPUUS, LPC, EPC, RSC, OL, TCS, MF, SIC, NS, RSZ, RTS, CDS, DSZ, DTS, IN, IDL, IS, IFS, IUS, IU
             insertCur.execute(IQ, (dataList))
         insertConn.commit()
         insertConn.close()

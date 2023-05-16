@@ -46,14 +46,14 @@ def plug_in(data, cycle) :
                     open_share_details_permissions, primary_owner_name, uptime, usb_write_protected, user_accounts, 
                     ad_query_last_logged_in_user_date, ad_query_last_logged_in_user_name, 
                     ad_query_last_logged_in_user_time, tanium_client_subnet, manufacturer, session_ip,
-                    nvidia_smi, online, asset_collection_date
+                    nvidia_smi, online, iscsi_name, iscsi_drive_letter, iscsi_size, iscsi_free_space, asset_collection_date
                 ) VALUES (
                     %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, 
                     %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, 
                     %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,
                     %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,
                     %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, 
-                    %s, %s, %s, %s, %s, %s, %s, %s,'""" + insertDate + """'
+                    %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,'""" + insertDate + """'
                 )
                 ON CONFLICT (computer_id)
                 DO UPDATE SET
@@ -114,6 +114,10 @@ def plug_in(data, cycle) :
                     session_ip = excluded.session_ip,
                     nvidia_smi = excluded.nvidia_smi, 
                     online = excluded.online,
+                    iscsi_name = excluded.iscsi_name,
+                    iscsi_drive_letter = excluded.iscsi_drive_letter, 
+                    iscsi_size = excluded.iscsi_size, 
+                    iscsi_free_space = excluded.iscsi_free_space,
                     asset_collection_date = '""" + insertDate + """'                                                                
             """
             #print(insertDate)
@@ -135,16 +139,16 @@ def plug_in(data, cycle) :
                     open_share_details_permissions, primary_owner_name, uptime, usb_write_protected, user_accounts, 
                     ad_query_last_logged_in_user_date, ad_query_last_logged_in_user_name, 
                     ad_query_last_logged_in_user_time, tanium_client_subnet, manufacturer, session_ip,
-                    nvidia_smi, online, asset_collection_date
+                    nvidia_smi, online, iscsi_name, iscsi_drive_letter, iscsi_size, iscsi_free_space, asset_collection_date
                 ) VALUES (
                     %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, 
                     %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, 
                     %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,
                     %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,
                     %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, 
-                    %s, %s, %s, %s, %s, %s, %s, %s, '""" + insertDate + """')"""
+                    %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, '""" + insertDate + """')"""
         datalen = len(data.computer_id)
-        
+
         if PROGRESS == 'true' :
             DATA_list = tqdm(range(datalen),
                             total=datalen,
@@ -211,10 +215,14 @@ def plug_in(data, cycle) :
             SI = data.sessionIp[i]
             NS = data.nvidiaSmi[i]
             OL = data.online[i]
+            IN = data.iscsi_name[i]
+            IDL = data.iscsi_drive_letter[i]
+            IS = data.iscsi_size[i]
+            IFS = data.iscsi_free_space[i]
             dataList = CI, CN, LR, DTS, DUS, OP, OS, IV, CT, IP, LPC, EPC, RUS, RTS, IA, IAV, IASUS, IAU, RP, RS, CPUC, \
                        CPUDST, CPUDCPU, CPUDCPUS, CPUDTPP, CPUDTC, CPUDTLP, DFS, HCPUP, HMP, HU, IPA, TCNATIPA, LLIU, \
                        LPP, LPN, LPLP, LSC, MACA, MC, openPort, OSDN, OSDPath, OSDS, OSDT, OSDP, PON, Uptime, USBWP, \
-                       UA, ADQLLIUD, ADQLLIUN, ADQLLIUT, TCS, manufacturer, SI, NS, OL
+                       UA, ADQLLIUD, ADQLLIUN, ADQLLIUT, TCS, manufacturer, SI, NS, OL, IN, IDL, IS, IFS
             insertCur.execute(IQ, (dataList))
         insertConn.commit()
         insertConn.close()

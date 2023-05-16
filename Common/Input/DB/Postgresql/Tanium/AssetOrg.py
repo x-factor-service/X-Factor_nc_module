@@ -45,7 +45,7 @@ def plug_in(dataType) :
                         open_share_details_permissions, primary_owner_name, uptime, usb_write_protected, user_accounts, 
                         ad_query_last_logged_in_user_date, ad_query_last_logged_in_user_name, 
                         ad_query_last_logged_in_user_time, tanium_client_subnet, manufacturer, session_ip,
-                        nvidia_smi, online, asset_collection_date
+                        nvidia_smi, online, iscsi_name, iscsi_drive_letter, iscsi_size, iscsi_free_space, asset_collection_date
                     from  
                         """ + MAT + """ 
                     where 
@@ -69,7 +69,7 @@ def plug_in(dataType) :
                         open_share_details_permissions, primary_owner_name, uptime, usb_write_protected, user_accounts, 
                         ad_query_last_logged_in_user_date, ad_query_last_logged_in_user_name, 
                         ad_query_last_logged_in_user_time, tanium_client_subnet, manufacturer, session_ip,
-                        nvidia_smi, online, asset_collection_date
+                        nvidia_smi, online, iscsi_name, iscsi_drive_letter, iscsi_size, iscsi_free_space, asset_collection_date
                     from  
                         """ + MAT
 
@@ -124,7 +124,11 @@ def plug_in(dataType) :
                         ma.manufacturer,
                         ma.session_ip,
                         ma.nvidia_smi,
-                        ma.cup_details_cup_speed
+                        ma.cup_details_cup_speed,
+                        ma.iscsi_name,
+                        ma.iscsi_drive_letter, 
+                        ma.iscsi_size, 
+                        ma.iscsi_free_space
                     from
                         (select 
                             computer_id, 
@@ -149,7 +153,11 @@ def plug_in(dataType) :
                             manufacturer,
                             session_ip,
                             nvidia_smi,
-                            cup_details_cup_speed
+                            cup_details_cup_speed,
+                            iscsi_name,
+                            iscsi_drive_letter, 
+                            iscsi_size, 
+                            iscsi_free_space
                         from 
                             """+MAT+"""
                         where
@@ -193,7 +201,11 @@ def plug_in(dataType) :
                         ma.manufacturer,
                         ma.session_ip,
                         ma.nvidia_smi,
-                        ma.cup_details_cup_speed
+                        ma.cup_details_cup_speed,
+                        ma.iscsi_name,
+                        ma.iscsi_drive_letter, 
+                        ma.iscsi_size, 
+                        ma.iscsi_free_space
                     from
                         (select 
                             computer_id, 
@@ -218,7 +230,11 @@ def plug_in(dataType) :
                             manufacturer,
                             session_ip,
                             nvidia_smi,
-                            cup_details_cup_speed
+                            cup_details_cup_speed,
+                            iscsi_name,
+                            iscsi_drive_letter, 
+                            iscsi_size, 
+                            iscsi_free_space
                         from 
                             """ + MAT + """
                         ) as ma

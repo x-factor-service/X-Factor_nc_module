@@ -38,7 +38,7 @@ def minutely_plug_in():                                                         
     STMIPIDBPU = SETTING['CORE']['Tanium']['STATISTICS']['MINUTELY']['INPUT']['DB']['PS'].lower()   # (통계 Data MINUTELY Input plug in postgresql DB 사용 여부 설정)
     STMTPIU = SETTING['CORE']['Tanium']['STATISTICS']['MINUTELY']['Transform'].lower()              # (통계 Data MINUTELY Transform(preprocessing) plug in 사용 여부 설정)
     STMOPODBPU = SETTING['CORE']['Tanium']['STATISTICS']['MINUTELY']['OUTPUT']['DB']['PS'].lower()  # (통계 Data MINUTELY Output plug in postgresql DB 사용 여부 설정)
-    
+
     # SOURCE
     if SOMIPAPIU == 'true':     # (Source Data MINUTELY Input plug in API 사용 여부 확인 - 사용함.)
         SK = CIATSPI()['dataList'][0]  # Sesstion Key (Tanium Sesstion Key 호출)
@@ -55,7 +55,7 @@ def minutely_plug_in():                                                         
         CODBPTAOPI(SOODL, 'minutely')                                                       # (minutely_asset Table에 수집)
     # output plug in 이 postgresql DB 외의 것들 구현 예정
 
-    
+
     # STATISTICS
     if STCU == 'true' :                                                                     # (통계 Data 수집 여부 확인 - 사용함.)
         # statistics List
@@ -81,7 +81,7 @@ def minutely_plug_in():                                                         
         NSDFT = CTDSPPI(NS, 'DB', 'minutely_statistics_list', 'normal')                     # Normal Statistics DataFrame Transform ( 일반 값을 Data Frame 형태로 변형)
         COS=CASCOPI(MDSDDFTS)                                                               # Count Statistics (일반 값)
         COSDFT = CTDSPPI(COS, 'DB', 'minutely_statistics_list', 'count')                    # Count Statistics DataFrame Transform ( 카운트 값을 Data Frame 형태로 변형)
-        
+
 
 
         UCSM = CTMPI(USDFT, CSDFT)                                                          # Usage and Compare Statistics Merge (DataFrame 형태의 사용량 통계 & 비교 통계 병합)
@@ -137,8 +137,8 @@ def minutely_plug_in():                                                         
         RSGBS = CASGBCPI(MADFTS, 'running_service', 'RSNM')                                 # Running Service Group By Statistics (Running Service 통계)
         SIPGBS = CASGBCPI(MADFTS, 'session_ip', 'SIP')                                      # Session_Ip Group By Statistics (Session_ip 통계)
         ONAGBC = CASGBCPI(IPMALSDDFT, 'online_asset','')                                    # 서버전체수량 Statistic Table 적재
-
-        MSTD = OSGBS + OSVGBS + IVGBS + CTGBS + LPCGBS + EPCGBS + IAGBS + RSGBS + LRBGBS + DUSGBS + RUSGBS + CPUGBS + GRUGBS + GCUGBS + GLPCGBS + GEPCGBS + GRSCGBS + GRPLRGBS + GDUSGBS + GLOTGBS + GSCGBS + ONGBS + MFGBS + GPUCGBS + SIPGBS + ONAGBC # Minutely Statistics Total Data (minutely_statistics Table에 넣을 모든 통계데이터)
+        ISCGBS = CASGBCPI(IPMALSDDFT, 'iscsi_name', 'IS')
+        MSTD = OSGBS + OSVGBS + IVGBS + CTGBS + LPCGBS + EPCGBS + IAGBS + RSGBS + LRBGBS + DUSGBS + RUSGBS + CPUGBS + GRUGBS + GCUGBS + GLPCGBS + GEPCGBS + GRSCGBS + GRPLRGBS + GDUSGBS + GLOTGBS + GSCGBS + ONGBS + MFGBS + GPUCGBS + SIPGBS + ONAGBC +ISCGBS  #+ IDL + IS + IFS + IUS + IU  # Minutely Statistics Total Data (minutely_statistics Table에 넣을 모든 통계데이터)
         SDDFT = CTDSAPI(MSTD, 'DB', 'minutely_statistics')                                  # Statistics Data Data Frame Transform (Statistics 데이터를 Data Frame 형태로 변형)
 
         if STMOPODBPU == 'true':                                                            # (통계 Data MINUTELY Output plug in postgresql DB 사용 여부 확인 - 사용함.)
