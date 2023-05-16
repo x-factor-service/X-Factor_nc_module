@@ -24,6 +24,7 @@ from Common.Analysis.Statistics.Count import plug_in as CASCOPI
 from Common.Output.DB.Postgresql.Tanium.DashBoard.AssetOrg import plug_in as CODBPTAOPI
 from Common.Output.DB.Postgresql.Tanium.DashBoard.StatisticsList import plug_in as CODBPTSLPI
 from Common.Output.DB.Postgresql.Tanium.DashBoard.Statistics import plug_in as CODBPTAPI
+from Common.Output.DB.Postgresql.Tanium.DashBoard.Statistics import delete as CODBPD
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
@@ -157,6 +158,8 @@ def daily_plug_in():                                                            
     MSIPDL = CIDBPTSPI('minutely')                                                          # InPut Data List (Module로 DB에 수집한 데이터 호출 : minutely_statistics Table)
     MSDFT = CTDSPPI(MSIPDL, 'DB', 'minutely_statistics', '')                                # Data Frame Transform (호출한 데이터를 Data Frame 형태로 변형)
     CODBPTAPI(MSDFT, 'daily')                                                               # (daily_statistics Table에 수집)
+    CODBPD('minutely_delete')
+    CODBPD('daily_delete')
 
 
 
