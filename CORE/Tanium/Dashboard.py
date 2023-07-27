@@ -25,7 +25,7 @@ from Common.Output.DB.Postgresql.Tanium.DashBoard.AssetOrg import plug_in as COD
 from Common.Output.DB.Postgresql.Tanium.DashBoard.StatisticsList import plug_in as CODBPTSLPI
 from Common.Output.DB.Postgresql.Tanium.DashBoard.Statistics import plug_in as CODBPTAPI
 from Common.Output.DB.Postgresql.Tanium.DashBoard.Statistics import delete as CODBPD
-
+from Common.Output.DB.Postgresql.Tanium.DashBoard.Statistics import session_ip_select as CODBPS
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 
@@ -144,6 +144,7 @@ def minutely_plug_in():                                                         
 
         if STMOPODBPU == 'true':                                                            # (통계 Data MINUTELY Output plug in postgresql DB 사용 여부 확인 - 사용함.)
             CODBPTAPI(SDDFT, 'minutely')
+            CODBPS()
 
 
 def daily_plug_in():                                                                        # 변수 명 Full Name : Full Name에서 대문자로 명시한 것들을 뽑아서 사용 (괄호 안의 내용은 설명)
