@@ -24,7 +24,9 @@ def plug_in(data, dataType):
             pattern = re.compile('[A-Za-z]')
             CID = data['computer_id'][c]
             IANM = []
-            if not data['installed_applications_name'][c].startswith('{"[current') and not data['installed_applications_name'][c].startswith('{"TSE-Error') and not data['installed_applications_name'][c].startswith('{"Unknown') and not data['installed_applications_name'][c]== ' '   and not data['installed_applications_name'][c].startswith('[hash'):
+
+            if 'result' not in data['installed_applications_name'][c] and 'TSE' not in data['installed_applications_name'][c] and 'hash' not in data['installed_applications_name'][c] and 'Unknown' not in data['installed_applications_name'][c] and not data['installed_applications_name'][c]== ' ':
+            # if not data['installed_applications_name'][c].startswith('{"[current') and not data['installed_applications_name'][c].startswith('{"TSE-Error') and not data['installed_applications_name'][c].startswith('{"Unknown') and not data['installed_applications_name'][c]== ' '   and not data['installed_applications_name'][c].startswith('[hash'):
                 for d in data.installed_applications_name[c].replace('"', '').replace('{', '').replace('}', '').split('!'):
                     if d.startswith(','):
                         d = d.lstrip(',').replace('"','')
@@ -35,8 +37,8 @@ def plug_in(data, dataType):
             else:
                 IANM.append('unconfirmed')
 
-
-            if not data['running_service'][c].startswith('{"[current') and not data['running_service'][c].startswith('{"TSE-Error') and not data['running_service'][c].startswith('Unknown') and not data['running_service'][c] == ' '  and not data['running_service'][c].startswith('[hash'):
+            if 'result' not in data['running_service'][c] and 'TSE' not in data['running_service'][c] and 'hash' not in data['running_service'][c] and 'Unknown' not in data['running_service'][c] and not data['running_service'][c] == ' ':
+            # if not data['running_service'][c].startswith('{"[current') and not data['running_service'][c].startswith('{"TSE-Error') and not data['running_service'][c].startswith('Unknown') and not data['running_service'][c] == ' '  and not data['running_service'][c].startswith('[hash'):
                 if data['running_service'][c][1] == '"':
                     RS = data['running_service'][c].replace('"','').replace('{','').replace('}','').split(',')
                 else:
@@ -44,8 +46,8 @@ def plug_in(data, dataType):
             else:
                 RS= 'unconfirmed'
 
-
-            if not data['manufacturer'][c].startswith('[current') and not data['manufacturer'][c].startswith('TSE-Error') and not data['manufacturer'][c].startswith('Unknown') and not data['manufacturer'][c]== ' ' and not data['manufacturer'][c].startswith('[hash'):
+            if 'result' not in data['manufacturer'][c] and 'TSE' not in data['manufacturer'][c] and 'hash' not in data['manufacturer'][c] and 'Unknown' not in data['manufacturer'][c] and not data['manufacturer'][c]== ' ':
+            # if not data['manufacturer'][c].startswith('[current') and not data['manufacturer'][c].startswith('TSE-Error') and not data['manufacturer'][c].startswith('Unknown') and not data['manufacturer'][c]== ' ' and not data['manufacturer'][c].startswith('[hash'):
                 if data['manufacturer'][c] in ['HP', 'HPE']:
                     MF = 'HPE'
                 else:
@@ -57,7 +59,8 @@ def plug_in(data, dataType):
 
 
             # 세션ip 전처리 추가 예정(server별 session상위5개 ) 새로운 Sensor로 수정한부분
-            if not data['session_ip'][c].startswith('{"[current') and "TSE-Error" not in data['session_ip'][c] and not data['session_ip'][c].startswith('{"[Unknown') and not data['session_ip'][c] == ' ':
+            if 'result' not in data['session_ip'][c] and 'TSE' not in data['session_ip'][c] and 'hash' not in data['session_ip'][c] and 'Unknown' not in data['session_ip'][c] and not data['session_ip'][c] == ' ':
+            # if not data['session_ip'][c].startswith('{"[current') and "TSE-Error" not in data['session_ip'][c] and not data['session_ip'][c].startswith('{"[Unknown') and not data['session_ip'][c] == ' ':
                 if data['session_ip'][c].startswith('{"[no result'):
                     SIP = ['no results']
                 elif data['session_ip'][c][2] == '(':
@@ -138,11 +141,14 @@ def plug_in(data, dataType):
 
             if dataType == 'minutely_daily_asset':
                 CNM = data['computer_name'][c]
-                if data['cup_details_cup_speed'][c] == '' or data['cup_details_cup_speed'][c].startswith('[current') or data['cup_details_cup_speed'][c].startswith('[hash'):
+                if 'result' not in data['cup_details_cup_speed'][c] and 'TSE' not in data['cup_details_cup_speed'][c] and 'hash' not in data['cup_details_cup_speed'][c] and 'Unknown' not in data['cup_details_cup_speed'][c] and data['cup_details_cup_speed'][c] == '':
+                # if data['cup_details_cup_speed'][c] == '' or data['cup_details_cup_speed'][c].startswith('[current') or data['cup_details_cup_speed'][c].startswith('[hash'):
                     CDS = 'unconfirmed'
                 else:
                     CDS = data['cup_details_cup_speed'][c].split(' ')[0]
-                if not data['last_reboot'][c].startswith('[current') and not data['last_reboot'][c].startswith('TSE-Error') and not data['last_reboot'][c].startswith('Unknown') and not data['last_reboot'][c].startswith('[hash'):
+
+                if 'result' not in data['last_reboot'][c] and 'TSE' not in data['last_reboot'][c] and 'hash' not in data['last_reboot'][c] and 'Unknown' not in data['last_reboot'][c]:
+                # if not data['last_reboot'][c].startswith('[current') and not data['last_reboot'][c].startswith('TSE-Error') and not data['last_reboot'][c].startswith('Unknown') and not data['last_reboot'][c].startswith('[hash'):
                     LR = datetime.strptime(data['last_reboot'][c].replace('-', '+').split(' +')[0], "%a, %d %b %Y %H:%M:%S")
                 else:
                     LR = 'unconfirmed'
@@ -151,7 +157,8 @@ def plug_in(data, dataType):
                 DTS_item = []
                 DTS_sum = 0
                 DTS_result = 0
-                if not data['disk_total_space'][c].startswith('{"[current') and not data['disk_total_space'][c].startswith('{"TSE-Error') and not data['disk_total_space'][c].startswith('{"Unknown') and not data['disk_total_space'][c].startswith('[hash'):
+                if 'result' not in data['disk_total_space'][c] and 'TSE' not in data['disk_total_space'][c] and 'hash' not in data['disk_total_space'][c] and 'Unknown' not in data['disk_total_space'][c]:
+                # if not data['disk_total_space'][c].startswith('{"[current') and not data['disk_total_space'][c].startswith('{"TSE-Error') and not data['disk_total_space'][c].startswith('{"Unknown') and not data['disk_total_space'][c].startswith('[hash'):
                     if data['disk_total_space'][c] == None:
                         data['disk_total_space'][c] = 0
                     else:
@@ -194,7 +201,9 @@ def plug_in(data, dataType):
                 DUS_item = []
                 DUS_sum = 0
                 DUS_result = 0
-                if not data['disk_used_space'][c].startswith('{"[current') and not data['disk_used_space'][c].startswith('{"TSE-Error') and not data['disk_used_space'][c].startswith('{"Unknown') and not data['disk_used_space'][c].startswith('[hash'):
+
+                if 'result' not in data['disk_used_space'][c] and 'TSE' not in data['disk_used_space'][c] and 'hash' not in data['disk_used_space'][c] and 'Unknown' not in data['disk_used_space'][c]:
+                # if not data['disk_used_space'][c].startswith('{"[current') and not data['disk_used_space'][c].startswith('{"TSE-Error') and not data['disk_used_space'][c].startswith('{"Unknown') and not data['disk_used_space'][c].startswith('[hash'):
                     if data['disk_used_space'][c] == None:
                         data['disk_used_space'][c] = 0
                     else:
@@ -233,26 +242,30 @@ def plug_in(data, dataType):
                     DUS.append(str(items).replace('{', '').replace('}', '').replace('[', '').replace(']', ''))
                 else:
                     DUS.append('unconfirmed')
-
-                if not data['os_platform'][c].startswith('[current') and not data['os_platform'][c].startswith('TSE-Error') and not data['os_platform'][c].startswith('Unknown')  and not data['os_platform'][c].startswith('[hash'):
+                if 'result' not in data['os_platform'][c] and 'TSE' not in data['os_platform'][c] and 'hash' not in data['os_platform'][c] and 'Unknown' not in data['os_platform'][c]:
+                # if not data['os_platform'][c].startswith('[current') and not data['os_platform'][c].startswith('TSE-Error') and not data['os_platform'][c].startswith('Unknown')  and not data['os_platform'][c].startswith('[hash'):
                     OP = data['os_platform'][c]
                 else:
                     OP = 'unconfirmed'
-                if not data['operating_system'][c].startswith('[current') and not data['operating_system'][c].startswith('TSE-Error') and not data['operating_system'][c].startswith('Unknown') and not data['operating_system'][c].startswith('[hash'):
+                if 'result' not in data['operating_system'][c] and 'TSE' not in data['operating_system'][c] and 'hash' not in data['operating_system'][c] and 'Unknown' not in data['operating_system'][c]:
+                # if not data['operating_system'][c].startswith('[current') and not data['operating_system'][c].startswith('TSE-Error') and not data['operating_system'][c].startswith('Unknown') and not data['operating_system'][c].startswith('[hash'):
                     OS = re.sub(r'\(Core\)|\(Final\)', '', data['operating_system'][c])
                     OS = re.sub(r'(\.\d+)*', '', OS).strip()
                     #OS = data['operating_system'][c]
                 else:
                     OS = 'unconfirmed'
-                if not data['is_virtual'][c].startswith('[current') and not data['is_virtual'][c].startswith('TSE-Error') and not data['is_virtual'][c].startswith('Unknown') and not data['is_virtual'][c].startswith('[hash'):
+                if 'result' not in data['is_virtual'][c] and 'TSE' not in data['is_virtual'][c] and 'hash' not in data['is_virtual'][c] and 'Unknown' not in data['is_virtual'][c]:
+                # if not data['is_virtual'][c].startswith('[current') and not data['is_virtual'][c].startswith('TSE-Error') and not data['is_virtual'][c].startswith('Unknown') and not data['is_virtual'][c].startswith('[hash'):
                     IV = data['is_virtual'][c]
                 else:
                     IV = 'unconfirmed'
-                if not data['chassis_type'][c].startswith('[current') and not data['chassis_type'][c].startswith('TSE-Error') and not data['chassis_type'][c].startswith('Unknown') and not data['chassis_type'][c].startswith('[hash'):
+                if 'result' not in data['chassis_type'][c] and 'TSE' not in data['chassis_type'][c] and 'hash' not in data['chassis_type'][c] and 'Unknown' not in data['chassis_type'][c]:
+                # if not data['chassis_type'][c].startswith('[current') and not data['chassis_type'][c].startswith('TSE-Error') and not data['chassis_type'][c].startswith('Unknown') and not data['chassis_type'][c].startswith('[hash'):
                     CT = data['chassis_type'][c]
                 else:
                     CT = 'unconfirmed'
-                if not data['ipv_address'][c].startswith('[current') and not data['ipv_address'][c].startswith('TSE-Error') and not data['ipv_address'][c].startswith('Unknown') and not data['ipv_address'][c].startswith('[hash'):
+                if 'result' not in data['ipv_address'][c] and 'TSE' not in data['ipv_address'][c] and 'hash' not in data['ipv_address'][c] and 'Unknown' not in data['ipv_address'][c]:
+                # if not data['ipv_address'][c].startswith('[current') and not data['ipv_address'][c].startswith('TSE-Error') and not data['ipv_address'][c].startswith('Unknown') and not data['ipv_address'][c].startswith('[hash'):
                     IPV = data['ipv_address'][c]
                 else:
                     IPV = 'unconfirmed'
@@ -276,31 +289,31 @@ def plug_in(data, dataType):
                     YEPC = data['yesterday_established_port_count'][c]
                 else:
                     YEPC = 'unconfirmed'
-
-                if not data['ram_use_size'][c].startswith('[current') and not data['ram_use_size'][c].startswith('TSE-Error') and not data['ram_use_size'][c].startswith('Unknown') and not data['ram_use_size'][c].startswith('[hash'):
+                if 'result' not in data['ram_use_size'][c] and 'TSE' not in data['ram_use_size'][c] and 'hash' not in data['ram_use_size'][c] and 'Unknown' not in data['ram_use_size'][c]:
+                # if not data['ram_use_size'][c].startswith('[current') and not data['ram_use_size'][c].startswith('TSE-Error') and not data['ram_use_size'][c].startswith('Unknown') and not data['ram_use_size'][c].startswith('[hash'):
                     RUS = data['ram_use_size'][c].split(' ')[0]
                 else:
                     RUS = 'unconfirmed'
-
-                if not data['ram_total_size'][c].startswith('[current') and not data['ram_total_size'][c].startswith('TSE-Error') and not data['ram_total_size'][c].startswith('Unknown') and not data['ram_total_size'][c].startswith('[hash'):
+                if 'result' not in data['ram_total_size'][c] and 'TSE' not in data['ram_total_size'][c] and 'hash' not in data['ram_total_size'][c] and 'Unknown' not in data['ram_total_size'][c]:
+                # if not data['ram_total_size'][c].startswith('[current') and not data['ram_total_size'][c].startswith('TSE-Error') and not data['ram_total_size'][c].startswith('Unknown') and not data['ram_total_size'][c].startswith('[hash'):
                     RTS = data['ram_total_size'][c].split(' ')[0]
                 else:
                     RTS = 'unconfirmed'
-
-                if not data['cup_consumption'][c].startswith('[current') and not data['cup_consumption'][c].startswith('TSE-Error') and not data['cup_consumption'][c].startswith('[hash'):
+                if 'result' not in data['cup_consumption'][c] and 'TSE' not in data['cup_consumption'][c] and 'hash' not in data['cup_consumption'][c] and 'Unknown' not in data['cup_consumption'][c]:
+                # if not data['cup_consumption'][c].startswith('[current') and not data['cup_consumption'][c].startswith('TSE-Error') and not data['cup_consumption'][c].startswith('[hash'):
                     CPUC = float(data['cup_consumption'][c].split(' ')[0])
                 else:
                     CPUC = data['cup_consumption'][c]
-
-                if not data['online'][c].startswith('[current') and not data['online'][c].startswith(
-                        'TSE-Error') and not data['online'][c].startswith('Unknown') and not data['online'][c].startswith('[hash'):
+                if 'result' not in data['online'][c] and 'TSE' not in data['online'][c] and 'hash' not in data['online'][c] and 'Unknown' not in data['online'][c]:
+                # if not data['online'][c].startswith('[current') and not data['online'][c].startswith(
+                #         'TSE-Error') and not data['online'][c].startswith('Unknown') and not data['online'][c].startswith('[hash'):
                     OL = data['online'][c]
                 else:
                     OL = 'unconfirmed'
 
-
-                if not data['tanium_client_subnet'][c].startswith('[current') and not data['tanium_client_subnet'][c].startswith(
-                        'TSE-Error') and not data['tanium_client_subnet'][c].startswith('Unknown') and not data['tanium_client_subnet'][c].startswith('Can not determine') and not data['tanium_client_subnet'][c].startswith('[hash'):
+                if 'result' not in data['tanium_client_subnet'][c] and 'TSE' not in data['tanium_client_subnet'][c] and 'hash' not in data['tanium_client_subnet'][c] and 'Unknown' not in data['tanium_client_subnet'][c] and not data['tanium_client_subnet'][c].startswith('Can not determine'):
+                # if not data['tanium_client_subnet'][c].startswith('[current') and not data['tanium_client_subnet'][c].startswith(
+                #         'TSE-Error') and not data['tanium_client_subnet'][c].startswith('Unknown') and not data['tanium_client_subnet'][c].startswith('Can not determine') and not data['tanium_client_subnet'][c].startswith('[hash'):
                     if '0.0.0.0' in data['tanium_client_subnet'][c]:
                         TCS = 'unconfirmed'
                     elif data['tanium_client_subnet'][c] == '172.18.0.0/21' or data['tanium_client_subnet'][c] == '172.18.112.0/21':
@@ -341,26 +354,28 @@ def plug_in(data, dataType):
 
                     NS = [NS_count, str(NS_item)]
 
-                if not data['iscsi_name'][c].startswith('{"[current') and not data['iscsi_name'][c].startswith(
-                        '"TSE-Error') and not data['iscsi_name'][c].startswith(
-                    '"Unknown') and not data['iscsi_name'][c].startswith('"[hash') and not data['iscsi_name'][c].startswith('{"[no results') and not data['iscsi_name'][c].startswith('{"N/A'):
+
+                if 'N/A' not in data['iscsi_name'][c] and 'result' not in data['iscsi_name'][c] and 'TSE' not in data['iscsi_name'][c] and 'hash' not in data['iscsi_name'][c] and 'Unknown' not in data['iscsi_name'][c]:
+                # if not data['iscsi_name'][c].startswith('{"[current') and not data['iscsi_name'][c].startswith(
+                #         '"TSE-Error') and not data['iscsi_name'][c].startswith(
+                #     '"Unknown') and not data['iscsi_name'][c].startswith('"[hash') and not data['iscsi_name'][c].startswith('{"[no results') and not data['iscsi_name'][c].startswith('{"N/A'):
                     IN=data['iscsi_name'][c].replace('{','').replace('}','').replace('"','').split(',')
                     # IN='ok'
                 else:
                     IN = 'unconfirmed'
 
-
-                if not data['iscsi_drive_letter'][c].startswith('{"[current') and not data['iscsi_drive_letter'][c].startswith(
-                        '"TSE-Error') and not data['iscsi_drive_letter'][c].startswith(
-                    '"Unknown') and not data['iscsi_drive_letter'][c].startswith('[hash') and not data['iscsi_drive_letter'][c].startswith('{"[no results') and not data['iscsi_drive_letter'][c] == '{""}':
+                if 'N/A' not in data['iscsi_drive_letter'][c] and 'result' not in data['iscsi_drive_letter'][c] and 'TSE' not in data['iscsi_drive_letter'][c] and 'hash' not in data['iscsi_drive_letter'][c] and 'Unknown' not in data['iscsi_drive_letter'][c] and not data['iscsi_drive_letter'][c] == '{""}':
+                # if not data['iscsi_drive_letter'][c].startswith('{"[current') and not data['iscsi_drive_letter'][c].startswith(
+                #         '"TSE-Error') and not data['iscsi_drive_letter'][c].startswith(
+                #     '"Unknown') and not data['iscsi_drive_letter'][c].startswith('[hash') and not data['iscsi_drive_letter'][c].startswith('{"[no results') and not data['iscsi_drive_letter'][c] == '{""}':
                     IDL = data['iscsi_drive_letter'][c].strip('{"}').split('","')
                     # IDL='ok'
                 else:
                     IDL = 'unconfirmed'
 
-
-                if not data['iscsi_size'][c].startswith('{"[current') and not data['iscsi_size'][c].startswith('"TSE-Error') and not data['iscsi_size'][c].startswith(
-                    '"Unknown') and not data['iscsi_size'][c].startswith('"[hash') and not data['iscsi_size'][c].startswith('{"[no results') and not data['iscsi_size'][c] == '{""}':
+                if 'N/A' not in data['iscsi_size'][c] and 'result' not in data['iscsi_size'][c] and 'TSE' not in data['iscsi_size'][c] and 'hash' not in data['iscsi_size'][c] and 'Unknown' not in data['iscsi_size'][c] and not data['iscsi_size'][c] == '{""}':
+                # if not data['iscsi_size'][c].startswith('{"[current') and not data['iscsi_size'][c].startswith('"TSE-Error') and not data['iscsi_size'][c].startswith(
+                #     '"Unknown') and not data['iscsi_size'][c].startswith('"[hash') and not data['iscsi_size'][c].startswith('{"[no results') and not data['iscsi_size'][c] == '{""}':
                     # IS = data['iscsi_size'][c].replace('{', '').replace('}', '').replace('"', '').replace('GB','').split('","')
                     IS = data['iscsi_size'][c].strip('{"}').split('","')
                     IS = [re.findall(r'\d+', size)[0] for size in IS]
@@ -368,9 +383,10 @@ def plug_in(data, dataType):
                 else:
                     IS = 'unconfirmed'
 
-                if not data['iscsi_free_space'][c].startswith('{"[current') and not data['iscsi_free_space'][c].startswith(
-                        '"TSE-Error') and not data['iscsi_free_space'][c].startswith(
-                    '"Unknown') and not data['iscsi_free_space'][c].startswith('"[hash') and not data['iscsi_free_space'][c].startswith('{"[no results') and not data['iscsi_free_space'][c] == '{""}':
+                if 'N/A' not in data['iscsi_free_space'][c] and 'result' not in data['iscsi_free_space'][c] and 'TSE' not in data['iscsi_free_space'][c] and 'hash' not in data['iscsi_free_space'][c] and 'Unknown' not in data['iscsi_free_space'][c] and not data['iscsi_free_space'][c] == '{""}':
+                # if not data['iscsi_free_space'][c].startswith('{"[current') and not data['iscsi_free_space'][c].startswith(
+                #         '"TSE-Error') and not data['iscsi_free_space'][c].startswith(
+                #     '"Unknown') and not data['iscsi_free_space'][c].startswith('"[hash') and not data['iscsi_free_space'][c].startswith('{"[no results') and not data['iscsi_free_space'][c] == '{""}':
                     # IFS = data['iscsi_free_space'][c].replace('{', '').replace('}', '').replace('"', '').replace('GB','').split('","')
                     IFS = data['iscsi_free_space'][c].strip('{"}').split('","')
                     IFS = [re.findall(r'\d+', size)[0] for size in IFS]
