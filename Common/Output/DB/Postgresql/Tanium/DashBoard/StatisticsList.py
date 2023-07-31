@@ -39,7 +39,8 @@ def plug_in(data, cycle) :
                     asset_list_statistics_collection_date
                 ) VALUES (
                      %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, 
-                     %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, '""" + insertDate + """'
+                     %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, 
+                     %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, '""" + insertDate + """'
                 )
                 ON CONFLICT (computer_id)
                 DO UPDATE SET
@@ -86,7 +87,8 @@ def plug_in(data, cycle) :
                     asset_list_statistics_collection_date
                 ) VALUES (
                     %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, 
-                    %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, '""" + insertDate + """'
+                    %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, 
+                    %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, '""" + insertDate + """'
                 )
             """
         datalen = len(data.computer_id)

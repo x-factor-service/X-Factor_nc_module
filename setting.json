@@ -133,7 +133,7 @@
           "username": "administrator",
           "password": "xion123!",
           "SensorID": {
-            "COMMON" : "6322",
+            "COMMON" : "799",
             "VUL" : "4356"
           }
         },
