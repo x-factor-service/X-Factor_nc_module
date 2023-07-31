@@ -139,11 +139,14 @@ def minutely_plug_in():                                                         
         SIPGBS = CASGBCPI(MADFTS, 'session_ip', 'SIP')                                      # Session_Ip Group By Statistics (Session_ip 통계)
         ONAGBC = CASGBCPI(IPMALSDDFT, 'online_asset','')                                    # 서버전체수량 Statistic Table 적재
         ISCGBS = CASGBCPI(IPMALSDDFT, 'iscsi_name', 'IS')
-        MSTD = OSGBS + OSVGBS + IVGBS + CTGBS + LPCGBS + EPCGBS + IAGBS + RSGBS + LRBGBS + DUSGBS + RUSGBS + CPUGBS + GRUGBS + GCUGBS + GLPCGBS + GEPCGBS + GRSCGBS + GRPLRGBS + GDUSGBS + GLOTGBS + GSCGBS + ONGBS + MFGBS + GPUCGBS + SIPGBS + ONAGBC +ISCGBS  #+ IDL + IS + IFS + IUS + IU  # Minutely Statistics Total Data (minutely_statistics Table에 넣을 모든 통계데이터)
+        MSTD = OSGBS + OSVGBS + IVGBS + CTGBS + LPCGBS + EPCGBS + IAGBS + RSGBS + LRBGBS + DUSGBS + RUSGBS + CPUGBS + GRUGBS + GCUGBS + GLPCGBS + GEPCGBS + GRSCGBS + GRPLRGBS + GDUSGBS + GLOTGBS + GSCGBS + ONGBS + MFGBS + GPUCGBS + ONAGBC +ISCGBS  #+ IDL + IS + IFS + IUS + IU  # Minutely Statistics Total Data (minutely_statistics Table에 넣을 모든 통계데이터)
         SDDFT = CTDSAPI(MSTD, 'DB', 'minutely_statistics')                                  # Statistics Data Data Frame Transform (Statistics 데이터를 Data Frame 형태로 변형)
+        SDDFTJ = CTDSAPI(SIPGBS,'DB','minutely_statistics_session_ip')
 
         if STMOPODBPU == 'true':                                                            # (통계 Data MINUTELY Output plug in postgresql DB 사용 여부 확인 - 사용함.)
+            CODBPD('minutely_delete')
             CODBPTAPI(SDDFT, 'minutely')
+            CODBPTAPI(SDDFTJ, 'minutely_session_ip')                                        # session_ip se테이블 따로 쌓기
             CODBPS()
 
 
@@ -159,7 +162,7 @@ def daily_plug_in():                                                            
     MSIPDL = CIDBPTSPI('minutely')                                                          # InPut Data List (Module로 DB에 수집한 데이터 호출 : minutely_statistics Table)
     MSDFT = CTDSPPI(MSIPDL, 'DB', 'minutely_statistics', '')                                # Data Frame Transform (호출한 데이터를 Data Frame 형태로 변형)
     CODBPTAPI(MSDFT, 'daily')                                                               # (daily_statistics Table에 수집)
-    CODBPD('minutely_delete')
+
     CODBPD('daily_delete')
 
 

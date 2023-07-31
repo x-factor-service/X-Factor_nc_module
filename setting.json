@@ -171,7 +171,8 @@
               "MS" : "minutely_statistics",
               "DS" : "daily_statistics",
               "VQ" : "vulnerability_list",
-              "VJ" : "vulnerability_judge"
+              "VJ" : "vulnerability_judge",
+              "MSSI" : "minutely_statistics_session_ip"
             }
           }
         }

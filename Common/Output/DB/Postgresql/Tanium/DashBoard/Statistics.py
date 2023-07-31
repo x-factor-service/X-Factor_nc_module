@@ -13,6 +13,7 @@ DBUNM = SETTING['CORE']['Tanium']['OUTPUT']['DB']['PS']['USER']
 DBPWD = SETTING['CORE']['Tanium']['OUTPUT']['DB']['PS']['PWD']
 MST = SETTING['CORE']['Tanium']['OUTPUT']['DB']['PS']['TNM']['MS']
 DST = SETTING['CORE']['Tanium']['OUTPUT']['DB']['PS']['TNM']['DS']
+MSSIT = SETTING['CORE']['Tanium']['OUTPUT']['DB']['PS']['TNM']['MSSI']
 PROGRESS = SETTING['PROJECT']['PROGRESSBAR'].lower()
 
 
@@ -26,7 +27,9 @@ def plug_in(data, cycle):
             TNM = DST
             yesterday = (datetime.today() - timedelta(1)).strftime("%Y-%m-%d")
             insertDate = yesterday + " 23:59:59"
-
+        if cycle == 'minutely_session_ip':
+            TNM = MSSIT
+            insertDate = datetime.today().strftime("%Y-%m-%d %H:%M:%S")
         insertConn = psycopg2.connect(
             'host={0} port={1} dbname={2} user={3} password={4}'.format(DBHOST, DBPORT, DBNM, DBUNM, DBPWD))
         insertCur = insertConn.cursor()
@@ -50,6 +53,20 @@ def plug_in(data, cycle):
                     classification, item, item_count, statistics_collection_date
                 ) VALUES (
                     %s, %s, %s, '""" + insertDate + """')"""
+        elif cycle == 'minutely_session_ip':
+            IQ = """
+                INSERT INTO """ + TNM + """ (
+                    minutely_statistics_session_ip_unique, classification, item, item_count, statistics_collection_date
+                ) VALUES (
+                    %s, %s, %s, %s, '""" + insertDate + """'
+                )
+                ON CONFLICT (minutely_statistics_session_ip_unique)
+                DO UPDATE SET
+                    classification = excluded.classification, 
+                    item = excluded.item, 
+                    item_count = excluded.item_count,
+                    statistics_collection_date = '""" + insertDate + """'                                                                
+            """
         datalen = len(data.classification)
         
         if PROGRESS == 'true' :
@@ -67,6 +84,10 @@ def plug_in(data, cycle):
                 dataList = MSU, classification, item, IC
             elif cycle == 'daily':
                 dataList = classification, item, IC
+            elif cycle == 'minutely_session_ip':
+                MSUJ = data.minutely_statistics_session_ip_unique[i]
+                dataList = MSUJ, classification, item, IC
+
             insertCur.execute(IQ, (dataList))
         insertConn.commit()
         insertConn.close()
@@ -91,8 +112,6 @@ def delete(cycle):
             IQ = """
                 DELETE FROM minutely_statistics 
                 WHERE
-                    classification ='session_ip'
-                    or 
                     classification = 'running_service'
                     or
                     classification = 'installed_applications'
