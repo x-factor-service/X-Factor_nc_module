@@ -27,7 +27,7 @@ def plug_in(data, cycle):
             TNM = DST
             yesterday = (datetime.today() - timedelta(1)).strftime("%Y-%m-%d")
             insertDate = yesterday + " 23:59:59"
-        if cycle == 'minutely_session_ip':
+        elif cycle == 'minutely_session_ip':
             TNM = MSSIT
             insertDate = datetime.today().strftime("%Y-%m-%d %H:%M:%S")
         insertConn = psycopg2.connect(
@@ -119,6 +119,11 @@ def delete(cycle):
                     classification = 'session_ip_computer_name'
                 """
 
+        elif cycle == 'minutely_sessionIP_delete':
+            IQ = """
+                DELETE FROM minutely_statistics_session_ip 
+                """
+
         elif cycle == 'daily_delete':
             IQ = """
                 DELETE FROM daily_statistics 
@@ -150,9 +155,9 @@ def session_ip_select():
                 select
                     classification, item, item_count, minutely_statistics_list.computer_name
                 from
-                    minutely_statistics
+                    minutely_statistics_session_ip
                 join minutely_statistics_list
-                on split_part(minutely_statistics.item,':',1) = minutely_statistics_list.ipv_address
+                on split_part(minutely_statistics_session_ip.item,':',1) = minutely_statistics_list.ipv_address
                 where
                     classification = 'session_ip' and item != 'NO'
                 and
