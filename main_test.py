@@ -6,6 +6,8 @@ import urllib3
 import logging
 import json
 
+from Common.Dashboard.web.model.dashboard_function import DashboardData as DCDL
+
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 def main() :
@@ -32,6 +34,7 @@ def main() :
                 elif answer.lower() == 'n' :
                     CTVMPI('used')
                     install = False
+        print(DCDL())
 
     else:
         logging.info('Tanium 사용여부 : '+TU)
