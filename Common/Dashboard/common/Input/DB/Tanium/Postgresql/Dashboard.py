@@ -307,7 +307,7 @@ def plug_in(table, day, type):
             elif day == 'connectDestinationIpMore':
                 query = """
                         select
-                            mssi.item, mssi.item_count,msl.computer_name
+                            mssi.item, mssi.item_count,coalesce (msl.computer_name, 'Virtual/Service IP') as computer_name
                         from 
                             (select * from minutely_statistics_session_ip mssi where
                             classification = 'session_ip' and statistics_collection_date >= '""" + fiveMinutesAgo + """' and item != 'NO' order by item_count::INTEGER desc limit 50) as mssi                             
@@ -967,7 +967,7 @@ def plug_in(table, day, type):
                             and
                                 statistics_collection_date >= '""" + fiveMinuteAgo + """'
                             order by
-                                item_count::INTEGER desc 
+                                item_count::INTEGER desc limit 3
                     """
             # NC 서버 총 수량 추이 그래프(30일)
             if day == 'monthly':

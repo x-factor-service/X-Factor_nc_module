@@ -153,10 +153,10 @@ def session_ip_select():
         selectCur = selectConn.cursor()
         SQ = """
                 select
-                    classification, item, item_count, minutely_statistics_list.computer_name
+                    classification, item, item_count, coalesce (minutely_statistics_list.computer_name, 'Virtual/Service IP') as computer_name
                 from
                     minutely_statistics_session_ip
-                join minutely_statistics_list
+                left join minutely_statistics_list
                 on split_part(minutely_statistics_session_ip.item,':',1) = minutely_statistics_list.ipv_address
                 where
                     classification = 'session_ip' and item != 'NO'

@@ -75,8 +75,6 @@ def plug_in(data, inputPlugin, dataType) :
                     IC = d[3]
                     DFL.append([MSU, classification, item, IC])
 
-
-
         DF = pd.DataFrame(DFL, columns=DFC)
         logger.info('Statistics/All.py -  ' + inputPlugin+'/'+dataType+ ' 성공')
         return DF

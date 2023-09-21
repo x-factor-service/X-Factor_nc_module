@@ -68,7 +68,7 @@ def plug_in(data, dataType):
                     SIP = eval(SIP)
                     SIPL = []
                     for a in range(len(SIP)):
-                        if not SIP[a].startswith('[hash') and not SIP[a].startswith('Warning') and "TSE-Error" not in SIP[a]:
+                        if not SIP[a].startswith('[hash') and not SIP[a].startswith('Warning') and "TSE-Error" not in SIP[a] and 'result' not in SIP[a]:
                             b = eval(SIP[a])
                             SIPL.append(b[1])
                         else:

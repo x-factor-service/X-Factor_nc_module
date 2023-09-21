@@ -28,7 +28,6 @@ from Common.Output.DB.Postgresql.Tanium.DashBoard.Statistics import delete as CO
 from Common.Output.DB.Postgresql.Tanium.DashBoard.Statistics import session_ip_select as CODBPS
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-
 def minutely_plug_in():                                                                     # 변수 명 Full Name : Full Name에서 대문자로 명시한 것들을 뽑아서 사용 (괄호 안의 내용은 설명)
     with open("setting.json", encoding="UTF-8") as f:
         SETTING = json.loads(f.read())
